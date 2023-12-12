@@ -1,6 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
+Getting Started
 
 ### NPM
 
@@ -24,17 +22,26 @@ docker compose up -d
 
 Open [http://localhost:80](http://localhost:80) with your browseer to see the result.
 
-## Learn More
+## Infrastructure
 
-To learn more about Next.js, take a look at the following resources:
+### Secrets for Github Action
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+AWS Credentials
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- AWS_ACCESS_KEY_ID
+- AWS_SECRET_ACCESS_KEY
 
-## Deploy on Vercel
+### Variables for Terraform
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Backend**: change the BUCKET_NAME and BUCKET_REGION to your own
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+:warning: The AWS Credential you configured in Github Action Secrets **must** has access to the bucket.
+
+```hcl
+  backend "s3" {
+    bucket  = "BUCKET_NAME"
+    key     = "terraform.tfstate"
+    region  = "BUCKET-REGION"
+    encrypt = false
+  }
+```
