@@ -46,7 +46,10 @@ name: 'Terraform'
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "stage" ]
+    paths:
+      - "terraform/**"
+      - ".github/workflows/terraform.yml"
   pull_request:
 
 permissions:
