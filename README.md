@@ -2,23 +2,27 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+### NPM
 
 ```bash
+npm install
+# AND
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# OR
+npm run build && npm run start
+
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Docker
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```shell
+docker compose build
+docker compose up -d
+```
+
+Open [http://localhost:80](http://localhost:80) with your browseer to see the result.
 
 ## Learn More
 
