@@ -32,6 +32,7 @@ AWS related
 - AWS_SECRET_ACCESS_KEY
 - AWS_ACCOUNT_ID
 - AWS_REGION
+- AWS_ECR_REPO
 
 ### Variables for Terraform
 
