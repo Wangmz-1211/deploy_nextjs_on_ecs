@@ -2,8 +2,9 @@ name: "Build Image"
 
 on:
   push:
-    branches: ["main", "dev", "stage"]
+    branches: ["main"]
   pull_request:
+    branches: ["main"]
 
 permissions:
   contents: read
