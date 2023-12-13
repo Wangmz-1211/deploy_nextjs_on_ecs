@@ -17,3 +17,8 @@ variable "public_subnets" {
   type    = list(string)
   default = ["192.168.4.0/24", "192.168.5.0/24", "192.168.6.0/24"]
 }
+
+variable "app_name" {
+  type    = string
+  default = "my-devops-demo"
+}
