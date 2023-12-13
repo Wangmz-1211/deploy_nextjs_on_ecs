@@ -13,7 +13,10 @@ jobs:
     name: "Build"
     runs-on: ubuntu-latest
     environment: production
-
+    env:
+      AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ECR_REPO: ${{ secrets.AWS_ECR_REPO }}
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
