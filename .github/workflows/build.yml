@@ -2,7 +2,7 @@ name: "Build Image"
 
 on:
   push:
-    branches: ["main", "stage"]
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
