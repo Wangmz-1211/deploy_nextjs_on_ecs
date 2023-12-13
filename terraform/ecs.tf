@@ -27,7 +27,7 @@ module "ecs_service" {
 
   container_definitions = {
     app = {
-      cpu       = 512
+      cpu       = 1024
       memory    = 1024
       essential = true
       image     = "${module.ecr.repository_url}:latest"
@@ -39,6 +39,7 @@ module "ecs_service" {
           protocol      = "tcp"
         }
       ]
+      readonly_root_filesystem = false
     }
   }
 
@@ -62,7 +63,8 @@ module "ecs_service" {
     }
   }
 
-  subnet_ids = module.vpc.private_subnets
+  subnet_ids       = module.vpc.public_subnets
+  assign_public_ip = true
   security_group_rules = {
     alb_ingress_3000 = {
       description              = "Allow ALB to communicate with ECS on port 3000"

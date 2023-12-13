@@ -53,7 +53,7 @@ module "alb" {
       health_check = {
         enabled             = true
         path                = "/"
-        port                = "traffic-port"
+        port                = 3000
         protocol            = "HTTP"
         matcher             = "200-399"
         interval            = 30
