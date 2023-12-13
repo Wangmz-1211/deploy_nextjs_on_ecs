@@ -1,9 +1,8 @@
-resource "aws_ecr_repository" "ecr_repository" {
-  name                 = var.app_name
-  image_tag_mutability = "MUTABLE"
+module "ecr" {
+  source                          = "terraform-aws-modules/ecr/aws"
+  repository_name                 = var.app_name
+  repository_type                 = "private"
+  repository_image_tag_mutability = "MUTABLE"
 
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
+  create_lifecycle_policy = false
 }
