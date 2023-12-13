@@ -26,10 +26,13 @@ Open [http://localhost:80](http://localhost:80) with your browseer to see the re
 
 ### Secrets for Github Action
 
-AWS Credentials
+AWS related
 
 - AWS_ACCESS_KEY_ID
 - AWS_SECRET_ACCESS_KEY
+- AWS_ACCOUNT_ID
+- AWS_REGION
+- AWS_ECR_REPO
 
 ### Variables for Terraform
 
