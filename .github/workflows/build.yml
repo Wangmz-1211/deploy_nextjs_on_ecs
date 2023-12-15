@@ -1,10 +1,25 @@
 name: "Build Image"
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+      - "terraform/**"
+      - ".github/workflows/**"
+      - ".gitignore"
+      - ".git/**"
   pull_request:
     branches: ["main"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+      - "terraform/**"
+      - ".github/workflows/**"
+      - ".gitignore"
+      - ".git/**"
 
 permissions:
   contents: read
