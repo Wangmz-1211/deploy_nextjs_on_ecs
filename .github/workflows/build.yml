@@ -10,8 +10,33 @@ permissions:
   contents: read
 
 jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: ESLint
+        run: |
+          npm ci
+          npm run lint
+
+      - name: Build test
+        run: |
+          npm ci
+          npm run build
+      
   build:
     name: "Build"
+    needs: test
     runs-on: ubuntu-latest
     environment: production
     env:
