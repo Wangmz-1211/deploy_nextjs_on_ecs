@@ -48,10 +48,49 @@ AWS related
         encrypt = false
     }
    ```
-2. **App name**: Change the value of the  variable 'app-name' in `./terraform/variable.tf`, and keep the `secrets.AWS_ECR_REPO` in Github Action secrets same to that.
-    ```hcl
-    variable "app_name" {
-        type    = string
-        default = "my-devops-demo"
-    }
-    ```
+2. **App name**: Change the value of the variable 'app-name' in `./terraform/variable.tf`, and keep the `secrets.AWS_ECR_REPO` in Github Action secrets same to that.
+   ```hcl
+   variable "app_name" {
+       type    = string
+       default = "my-devops-demo"
+   }
+   ```
+
+## Workflows
+
+### Terraform
+
+```mermaid
+graph TD
+    Start((Start by:<br>- workflow_dispatch<br>- push/pr on infrastructure<br>- push/pr on stage )) ==> AWS[Setup AWS Credential] ==> TF[Setup Terraform]
+    secret_AWS[[AWS_ACCESS_KEY_ID<br>AWS_SECRET_ACCESS_KEY]] --> AWS
+    AWS --S3 access--> TF
+    TF ==> Plan ==dispatch<br>or<br>on branch infrastructure==> Apply
+    Plan == on branch stage==> Finish
+    Apply ==> Finish((Finish))
+```
+
+### CI/CD
+
+```mermaid
+graph TD
+	Start((Start by:<br>- workflow_dispatch<br>- push/pr on main))
+	Start ==> Test
+	subgraph Test
+		eslint --> build
+	end
+	Test ==> Build
+	subgraph Build
+		AWS[Setup AWS Credential]
+		secret_AWS[[AWS_ACCESS_KEY_ID<br>AWS_SECRET_ACCESS_KEY]] --> AWS
+		AWS ==access==> ECR[Login to ECR]
+		ECR ==> Docker[Build & Push]
+		ECR_secret[[AWS_ACCOUT_ID<br>AWS_REGION<br>AWS_ECR_REPO]] --> Docker
+	end
+	Build ==> Deploy
+	subgraph Deploy
+		AWS_setup[Setup AWS Credential] ==> ECS[ECS service update]
+		ECR_image[Image: app:latest] --> ECS
+		ECR_sec[[AWS_ECR_REPO]] --> ECS
+	end
+```
