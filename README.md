@@ -85,7 +85,7 @@ graph TD
 		secret_AWS[[AWS_ACCESS_KEY_ID<br>AWS_SECRET_ACCESS_KEY]] --> AWS
 		AWS ==access==> ECR[Login to ECR]
 		ECR ==> Docker[Build & Push]
-		ECR_secret[[AWS_ACCOUT_ID<br>AWS_REGION<br>AWS_ECR_REPO]] --> Docker
+		ECR_secret[[AWS_ACCOUNT_ID<br>AWS_REGION<br>AWS_ECR_REPO]] --> Docker
 	end
 	Build ==> Deploy
 	subgraph Deploy
