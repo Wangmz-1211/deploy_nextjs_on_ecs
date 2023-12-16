@@ -1,17 +1,57 @@
 name: "Build Image"
 
 on:
+  workflow_dispatch:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+      - "terraform/**"
+      - ".github/workflows/**"
+      - ".gitignore"
+      - ".git/**"
   pull_request:
     branches: ["main"]
+    paths-ignore:
+      - "README.md"
+      - "LICENSE"
+      - "terraform/**"
+      - ".github/workflows/**"
+      - ".gitignore"
+      - ".git/**"
 
 permissions:
   contents: read
 
 jobs:
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node.js setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: ESLint
+        run: |
+          npm ci
+          npm run lint
+
+      - name: Build test
+        run: |
+          npm ci
+          npm run build
+      
   build:
     name: "Build"
+    needs: test
     runs-on: ubuntu-latest
     environment: production
     env:
@@ -49,3 +89,27 @@ jobs:
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:${{ github.sha }}
           docker tag ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:${{ github.sha }} ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:latest
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_ECR_REPO }}:latest
+
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    needs: build
+    environment: production
+    defaults:
+      run:
+        shell: bash
+    steps:
+          # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Update ECS service
+        run: |
+          aws ecs update-service --cluster ${{ secrets.AWS_ECR_REPO }} --service "${{ secrets.AWS_ECR_REPO }}-service" --force-new-deployment --no-cli-pager
