@@ -27,8 +27,8 @@ module "ecs_service" {
 
   container_definitions = {
     app = {
-      cpu       = 1024
-      memory    = 1024
+      cpu       = 256
+      memory    = 512
       essential = true
       image     = "${module.ecr.repository_url}:latest"
       port_mappings = [
