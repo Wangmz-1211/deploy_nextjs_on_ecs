@@ -20,15 +20,15 @@ module "ecs_service" {
   name        = "${var.app_name}-service"
   cluster_arn = module.ecs_cluster.arn
 
-  cpu    = 1024
-  memory = 4096
+  cpu    = 256
+  memory = 512
 
   enable_execute_command = true
 
   container_definitions = {
     app = {
-      cpu       = 1024
-      memory    = 1024
+      cpu       = 256
+      memory    = 512
       essential = true
       image     = "${module.ecr.repository_url}:latest"
       port_mappings = [
