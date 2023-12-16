@@ -20,8 +20,8 @@ module "ecs_service" {
   name        = "${var.app_name}-service"
   cluster_arn = module.ecs_cluster.arn
 
-  cpu    = 1024
-  memory = 4096
+  cpu    = 256
+  memory = 512
 
   enable_execute_command = true
 
